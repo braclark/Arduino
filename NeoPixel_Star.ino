@@ -24,8 +24,8 @@ void setup() {
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = { rainbow, rainbowWithGlitter, colorwheel, oddeven, colorwipeX1, colorwipeX2, colorwipeX3, tim, tim2, tim3, confetti, sinelon, onlyGlitter, juggle, bpm };
-//SimplePatternList gPatterns = { tim3 };
+SimplePatternList gPatterns = { rainbow, rainbowWithGlitter, colorwheel, oddeven, colorwipeX1, colorwipeX2, colorwipeX3, tim, tim2, tim3, HarkHowTheBells, confetti, sinelon, onlyGlitter, juggle, bpm };
+//SimplePatternList gPatterns = { HarkHowTheBells };     // use this line to display only one pattern
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
@@ -69,7 +69,7 @@ void tim() {
 }
 
 void tim2() {
-  // makes ever other light on every second. Used to troubleshoot cross light bleed
+  // Another by Tim, makes ever other light red or green, and alternates every second.
   int oddeven = (millis() / 1000) % 2;
   for (int i; i < NUM_LEDS; i++) {
     if (oddeven == i % 2) {
@@ -81,6 +81,7 @@ void tim2() {
 }
 
 void tim3() {
+  // Yet another by Tim, red and green glitter
   fadeToBlackBy( leds, NUM_LEDS, 100);
   if ( random8() < 50) {
     if (random8() < 128 ) {
@@ -88,6 +89,33 @@ void tim3() {
     } else {
       leds[ random16(NUM_LEDS) ] += CRGB::Green;
     }
+  }
+}
+
+void HarkHowTheBells() {
+  fadeToBlackBy( leds, NUM_LEDS, 30);
+  int beat = (millis() / 167) % 6;
+  int point = (millis() / 167) % NUM_LEDS;
+  if (beat == 0) {
+    leds[point] = CRGB::White;
+    leds[point+1] = CRGB::White;
+  }
+  if (beat == 1) {
+    leds[point] = CRGB::White;
+    leds[point-1] = CRGB::White;
+  }
+  if (beat == 2) {
+    leds[point+1] = CHSV(gHue, 255, 255);
+  }
+  if (beat == 3) {
+    leds[point-1] = CHSV(gHue, 255, 255);
+  }
+  if (beat == 4) {
+    leds[point] = CHSV(gHue, 255, 255);
+    leds[point+1] = CHSV(gHue, 255, 255);
+  }
+  if (beat == 5) {
+// rest
   }
 }
 
