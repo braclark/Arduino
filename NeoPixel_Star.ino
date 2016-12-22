@@ -93,9 +93,9 @@ void tim3() {
 }
 
 void HarkHowTheBells() {
-  fadeToBlackBy( leds, NUM_LEDS, 30);
-  int beat = (millis() / 167) % 6;
-  int point = (millis() / 167) % NUM_LEDS;
+  fadeToBlackBy( leds, NUM_LEDS, 2);
+  int beat = (millis() / 200) % 6;
+  int point = (millis() / 200) % NUM_LEDS;
   if (beat == 0) {
     leds[point] = CRGB::White;
     leds[point+1] = CRGB::White;
