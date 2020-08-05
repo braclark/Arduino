@@ -59,20 +59,20 @@ void setup() {
 void loop() {
   switchState = digitalRead(SWITCH_PIN);
   if(switchState==LOW) {
-    if ((millis()-lastInput)<10000) {  // if the last switch was less than 10 seconds ago, increase the number of rapid switches
+    if ((millis()-lastInput)<10000) {  // if the last switch ended less than 10 seconds ago, increase the number of rapid switches
       rapidCount++;
       } else {
       rapidCount = 0;
       }
     lastInput = millis();  // set the last switch to now
-    if(rapidCount < 4){   // if there have been fewer than 4 switches within 10 seconds in a row, just do the basic sequence.
+    if(rapidCount < 4){   // if there have been fewer than 4 switches in a row with 10 seconds between them, just do the basic sequence.
       seq = 0;
       } else {
       if (goRandom == true) {
         seq = int(random(1,9));
         } else {
         seq++;
-        if (seq>8){ seq=0; }
+        if (seq>8){ seq=1; }
         }
       }
     if (seq == 0)Seq00();
@@ -84,6 +84,7 @@ void loop() {
     if (seq == 6)Seq06();
     if (seq == 7)Seq07();
     if (seq == 8)Seq08();
+    lastInput = millis();  // set the last switch to now
     } else {
     delay(50);
     }
@@ -95,8 +96,8 @@ void loop() {
 }
 
 void Seq00(){
-  gotoPercent(100,5,0);
-  gotoPercent(0,5,0);
+  gotoPercent(100,3,0);
+  gotoPercent(0,3,0);
 }
 
 void Seq01(){
@@ -113,6 +114,8 @@ void Seq03(){
   gotoPercent(100,10,0);
   gotoPercent(75,1,1000);
   gotoPercent(100,10,0);
+  gotoPercent(75,10,0);
+  gotoPercent(100,10,0);
   gotoPercent(0,5,0);
 }
 
@@ -120,7 +123,7 @@ void Seq04(){
   gotoPercent(25,1,500);
   gotoPercent(50,1,500);
   gotoPercent(75,1,2000);
-  gotoPercent(100,5,0);
+  gotoPercent(100,10,0);
   gotoPercent(0,5,0);
 }
 
@@ -130,37 +133,38 @@ void Seq05(){
   gotoPercent(75,5,0);
   gotoPercent(0,1,300);
   gotoPercent(80,5,1000);
-  gotoPercent(100,5,0);
+  gotoPercent(70,5,0);
+  gotoPercent(100,10,0);
   gotoPercent(0,3,0);
 }
 
 void Seq06(){
   gotoPercent(100,3,0);
   gotoPercent(80,1,500);
-  gotoPercent(100,5,500);
+  gotoPercent(100,8,500);
   gotoPercent(80,1,500);
-  gotoPercent(100,5,500);
+  gotoPercent(100,8,500);
   gotoPercent(80,1,500);
-  gotoPercent(50,2,500);
-  gotoPercent(25,3,500);
-  gotoPercent(0,4,0);
+  gotoPercent(50,1,500);
+  gotoPercent(25,1,500);
+  gotoPercent(0,1,0);
 }
 
 void Seq07(){
   gotoPercent(100,2,0);
-  for (int i=0; i<8; i++){
-    gotoPercent(80,2,0);
-    gotoPercent(100,5,0);
+  for (int i=0; i<10; i++){
+    gotoPercent(80,3,0);
+    gotoPercent(100,6,0);
     }
-  gotoPercent(100,5,2000);
+  gotoPercent(100,6,2000);
   gotoPercent(50,1,500);
   gotoPercent(0,1,0);
 }
 
 void Seq08(){
-  for (int i=30; i<=100; i+=5){
-    gotoPercent(i,5,0);
-    gotoPercent(i-30,5,0);
+  for (int i=30; i<=100; i+=10){
+    gotoPercent(i,7,0);
+    gotoPercent(i-30,4,0);
     }
   gotoPercent(0,5,0);
 }
@@ -168,6 +172,7 @@ void Seq08(){
 // Required parameters:
 //   targetPC   - Target percent (as an integer) 0-100, 0 is starting position, 100 is hitting the switch
 //   steps      - Steps per 10 ms update, higher numbers may cause the aurduino to reset without a capacitior
+//                3 and under seems to work well without a cap, 11 seems to be the maximum otherwise
 //   afterDelay - Adds a delay after completing the move
 void gotoPercent(int targetPC, int steps, int afterDelay){
   target = POS_START + ((POS_END - POS_START) * targetPC * .01);
