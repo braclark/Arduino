@@ -69,10 +69,10 @@ void loop() {
       seq = 0;
       } else {
       if (goRandom == true) {
-        seq = int(random(1,9));
+        seq = int(random(1,10));
         } else {
         seq++;
-        if (seq>8){ seq=1; }
+        if (seq>9){ seq=1; }
         }
       }
     if (seq == 0)Seq00();
@@ -84,6 +84,7 @@ void loop() {
     if (seq == 6)Seq06();
     if (seq == 7)Seq07();
     if (seq == 8)Seq08();
+    if (seq == 9)Seq09();
     lastInput = millis();  // set the last switch to now
     } else {
     delay(50);
@@ -167,6 +168,14 @@ void Seq08(){
     gotoPercent(i-30,4,0);
     }
   gotoPercent(0,5,0);
+}
+
+void Seq09(){
+  for (int i=0; i<random(10,20); i++){
+    gotoPercent(random(0,80),random(1,10),random(0,500));
+  }
+  gotoPercent(100,random(1,10),random(0,500));
+  gotoPercent(0,random(1,10),0);
 }
 
 // Required parameters:
