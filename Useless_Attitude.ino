@@ -3,12 +3,15 @@
 //Board used: Digispark Tiny 85
 //Select Board: Digispark (Default - 16.5mhz)
 
+//To use the Digispark Tiny 85 board and SoftRCPulseOut, you must first follow the Arduino IDE setup 
+//as explained here: http://digistump.com/wiki/digispark/tutorials/connecting
+
 //Connect servo orange wire to pin 0, red to 5v, and brown to GND
 //Also connect a capacitor in between red and brown to be able to move the servo faster
 //Without the cap, more than 3 steps per 10 ms may cause a reset
 #define SERVO_PIN 0
 
-//Connect the switch accross pins 2 and 3
+//Connect the switch across pins 2 and 3
 #define SWITCH_PIN 2
 #define SWITCH_OUT 3
 
